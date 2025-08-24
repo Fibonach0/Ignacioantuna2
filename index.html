@@ -1,695 +1,228 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es" data-theme="light">
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <title>Ignacio Antuña.</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
-
-    <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-    <!-- Vendor CSS Files -->
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
-    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
-    <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-
-    <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Brochure de Tino</title>
+  <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.prod.js"></script>
+  <link href="assets/css/style.css" rel="stylesheet">
+  
+  <style>
+   
+  </style>
 </head>
-
 <body>
-    <!-- ======= Header ======= -->
-    <header id="header">
-        <div class="d-flex flex-column">
-
-            <div class="profile">
-                <img src="assets/img/profile-img.jpg" alt="" class="img-fluid rounded-circle">
-                <h1 class="text-light"><a href="index.html">Ignacio Antuña</a></h1>
-                <div class="social-links mt-3 text-center">
-                    <a href="https://twitter.com/Ignacio_antu" class="twitter"><i class="bx bxl-twitter"></i></a>
-                    <a href="https://www.facebook.com/Pyro.A" class="facebook"><i class="bx bxl-facebook"></i></a>
-                    <a href="https://www.instagram.com/igna.antu/" class="instagram"><i class="bx bxl-instagram"></i></a>
-                    <a href="https://www.linkedin.com/in/ignacio-antuña-24093373/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-                    <a href="https://discord.gg/Rp6KzQJ" class="Discord"><span class="iconify" data-icon="bx:bxl-discord" data-inline="false"></span></a>
-                </div>
-            </div>
-
-            <nav class="nav-menu">
-                <ul>
-                    <li class="active"><a href="index.html"><i class="bx bx-home"></i> <span>Inicio</span></a></li>
-                    <li><a href="#about"><i class="bx bx-user"></i> <span>Sobre mí</span></a></li>
-                    <li><a href="#skills"><i class="bx bx-file-blank"></i> <span>Habilidades</span></a></li>
-                    <!-- <li><a href="#portfolio"><i class="bx bx-book-content"></i> Portfolio</a></li> -->
-                    <li><a href="#testimonials"><i class="bx bx-server"></i> Testimonios</a></li>
-                    <li><a href="#contact"><i class="bx bx-envelope"></i> Contacto</a></li>
-
-                </ul>
-            </nav>
-            <!-- .nav-menu -->
-            <button type="button" class="mobile-nav-toggle d-xl-none"><i class="icofont-navigation-menu"></i></button>
-
+  <div id="app" class="wrap">
+    <header>
+      <div class="brand">
+        <img class="logo" src="avatar_tino.jpg" alt="Tino">
+        <div>
+          <h1>Recuerdos de Tino</h1>
+          <div class="muted">Fotos, videos y mensajitos de la familia 💛</div>
         </div>
+      </div>
+      <button class="toggle" @click="toggleTheme">
+        <span v-if="theme==='light'">🌞 Modo claro</span>
+        <span v-else>🌙 Modo oscuro</span>
+      </button>
     </header>
-    <!-- End Header -->
 
-    <!-- ======= Hero Section ======= -->
-    <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
-        <div class="hero-container" data-aos="fade-in">
-            <h1>Ignacio Antuña</h1>
-            <p>Yo soy <span class="typed" data-typed-items="emprendedor, estudiante, trabajador, ."></span></p>
+    <!-- HERO: Carrusel + info -->
+    <section class="hero">
+      <div class="card">
+        <div class="carousel" @keydown.left.prevent="prev" @keydown.right.prevent="next" tabindex="0" ref="carousel">
+          <div class="slide"
+               v-for="(item,i) in slides"
+               :key="i"
+               :style="slideStyle(i)">
+            <img v-if="item.type==='image'" :src="item.src" :alt="item.alt || 'Foto'">
+            <video v-else controls :poster="item.poster || ''">
+              <source :src="item.src" type="video/mp4">
+            </video>
+          </div>
+          <div class="controls">
+            <button class="btn" @click="prev" aria-label="Anterior">‹</button>
+            <button class="btn" @click="next" aria-label="Siguiente">›</button>
+          </div>
+          <div class="indicators">
+            <button class="dot" v-for="(s,i) in slides" :key="'dot'+i" :class="{active: i===index}" @click="go(i)"></button>
+          </div>
         </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 8px 0;">Sobre este sitio</h2>
+        <p class="muted" style="margin:0">
+          Hecho con 💙 por papá y mamá. Navegá el carrusel, mirá el grid de fotos, y dejá un comentario.
+        </p>
+      </div>
     </section>
-    <!-- End Hero -->
 
-    <main id="main">
-
-        <!-- ======= About Section ======= -->
-        <section id="about" class="about">
-            <div class="container">
-
-                <div class="section-title">
-                    <h2>Sobre mí</h2>
-                    <p id="yearR">
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4" data-aos="fade-right">
-                        <img src="assets/img/profile-img.jpg" class="img-fluid" alt="">
-                    </div>
-                    <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-                        <h3>Estudiante de programación.</h3>
-                        <p class="font-italic">
-                            Empecé a estudiar lo que me gusta tarde, por razones que me excedían seguí en el negocio familiar, pasé por otros trabajos tratando de encontrarme a mi mismo porque no encontraba algo que me gustara realmente hasta que un día, un amigo me mostró lo que
-                            era la programación; y ahí empecé a investigar y a hacer cursos cortos como hobby.</p>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <ul>
-                                    <li><i class="icofont-rounded-right"></i> <strong>Fecha de nacimiento:</strong> 18/01/1993</li>
-                                    <li><i class="icofont-rounded-right"></i> <strong>Website:</strong> ignacio.antuña.com.ar</li>
-                                    <li><i class="icofont-rounded-right"></i> <strong>Teléfono:</strong> +54 9 11 2852 4957</li>
-                                    <li><i class="icofont-rounded-right"></i> <strong>Ciudad:</strong> Tigre, Buenos Aires, Argentina</li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-6">
-                                <ul>
-                                    <li><i class="icofont-rounded-right"></i> <strong>Edad:</strong>
-                                        <bold id="day"></bold>
-                                    </li>
-                                    <li><i class="icofont-rounded-right"></i> <strong>Email:</strong> ignacio.antu@gmail.com</li>
-                                    <li><i class="icofont-rounded-right"></i> <strong>Freelance:</strong> Disponible</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <p>
-                            Páginas tales como <a href="https://www.codecademy.com" target="_blank">CodeCademy</a>, <a href="https://www.udemy.com" target="_blank">Udemy</a>, <a href="https://www.w3schools.com/" target="_blank">w3schools</a>, y
-                            <a href="https://www.sololearn.com" target="_blank">SoloLearn</a> me ayudaron muchísimo para aprender por mi cuenta hasta que finalmente pude empezar la carrera.</p>
-
-                    </div>
-                </div>
-
-            </div>
-        </section>
-        <!-- End About Section -->
-
-
-
-        <!-- ======= Skills Section ======= -->
-        <section id="skills" class="skills section-bg">
-            <div class="container">
-
-                <div class="section-title">
-                    <h2>Habilidades</h2>
-                    <p> En general me especialicé en HTML y CSS pero me encanta aprender nuevos lenguajes tales como C++ y python.</p>
-                    <p>Me intriga mucho y me facina aprender sobre redes y armado de componentes y computadoras.</p>
-
-                </div>
-
-                <div class="row skills-content">
-
-                    <div class="col-lg-6" data-aos="fade-up">
-
-                        <div class="progress">
-                            <span class="skill">HTML* <i class="val">100%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">CSS* <i class="val">73%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="73" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">JavaScript* <i class="val">28%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="progress">
-                            <span class="skill">WordPress <i class="val">48%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">SQL* <i class="val">66%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">GNU-Linux (Debian Distros).<i class="val">90%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">Microsoft Windows.<i class="val">95%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">MacOs.<i class="val">85%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">Redes.<i class="val">95%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- End First column -->
-                    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-
-                        <div class="progress">
-                            <span class="skill">C++* <i class="val">92%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">Python* <i class="val">20%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">Photoshop <i class="val">55%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">C#* <i class="val">15%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">VMware: Instalacion de VMs<i class="val">100%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">.NET<i class="val">40%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">php<i class="val">43%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">Internet of Things<i class="val">95%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress">
-                            <span class="skill">Armado de Computadoras<i class="val">100%</i></span>
-                            <div class="progress-bar-wrap">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <p id="aclaracion"> *Porcentaje representado por CodeCademy © </p>
-
-        </section>
-        <!-- End Second Column -->
-        <!-- End Skills Section -->
-
-        <!-- ======= Resume Section ======= -->
-        <section id="resume " class="resume ">
-            <div class="container ">
-
-                <div class="section-title">
-                    <h2>Resumen</h2>
-                    <p>Soy una persona con capacidad para resolver problemas, en condiciones de alta presión, logrando las metas y objetivos, tengo facilidad de adaptación y una gran experiencia en el trabajo en equipo. Busco dar un paso más en mi carrera
-                        profesional, para continuar desarrollándome en las áreas que me apasionan de tecnología, infraestructura y desarrollo. Tengo muy buen conocimiento de armado y desarmado de computadoras de escritorio tanto como laptops, desde cambiar
-                        una RAM hasta armar un gabinete desde cero.</p>
-                </div>
-                <!-- ======= Education Section ======= -->
-                <div class="row ">
-                    <div class="col-lg-6 " data-aos="fade-up ">
-
-                        <h3 class="resume-title ">Educación</h3>
-                        <div class="resume-item ">
-                            <h4>Bachiller en economía y gestión de las empresas</h4>
-                            <h5>2009 - 2011</h5>
-                            <p><em>Instituto Gaspar Campos, San Miguel, Buenos Aires</em></p>
-                            <ul>
-                                <li>Toma de decisiones para planificar, organizar, gestionar y controlar la empresa con el fin de alcanzar sus objetivos.</li>
-                                <li>Principios organizativos para lograr la eficiendia en el uso de los recursos humanos, materiales, inmateriales y financieros de las empresas.</li>
-                            </ul>
-                        </div>
-
-                        <!-- ======= Experience Section ======= -->
-                    </div>
-
-                    <!--JP Morgan Chase-->
-                    <div class="col-lg-6 " data-aos="fade-up " data-aos-delay="100 ">
-                        <h3 class="resume-title ">Experiencia Profesional</h3>
-                        <div class="resume-item ">
-                            <h4>Team leader & Tech Leader on Help-Desk.</h4>
-                            <!-- <h5>2022 - Presente</h5> -->
-                            <p><em>JP Morgan Chase</em></p>
-                            <ul>
-
-                                <li>Gestion del flujo de las actividades del equipo.</li>
-                                <li>Implementación de mejoras para el equipo y la empresa.</li>
-                                <li>Control de los procesos.</li>
-                                <li>Desarrollo de estrategias.</li>
-                                <li>Análisis de Métricas.</li>
-                                <li>Proveer Coaching y feedback al equipo.</li>
-                                <li>Promover y apoyar el dessarrollo del equipo.</li>
-                            </ul>
-                        </div>
-
-                        <!--Despegar-->
-
-                        <div class="resume-item ">
-                            <h4>Help-Desk</h4>
-                            <!-- <h5>2021 - 2022</h5> -->
-                            <p><em>Despegar S.A</em></p>
-                            <ul>
-                                <li>Resolucion de Tickets nivel 1, 2 y 3.</li>
-                                <li>Diagnostico y resolución de incidentes.</li>
-                                <li>Creación y corrección de scripts.</li>
-                                <li>Automatización de sistemas.</li>
-                                <li>Creación de Bots.</li>
-                            </ul>
-                        </div>
-
-                        <!--Cantarini-->
-                        <div class="resume-item ">
-                            <h4>Sistemas</h4>
-                            <!-- <h5>2019 - 2021</h5> -->
-                            <p><em>Transportes Cantarini S.R.L.</em></p>
-                            <ul>
-                                <li>Soporte técnico de Hardware y Software a usuarios de la empresa (De manera Local y remota).</li>
-                                <li>Diagnostico y resolución de incidentes.</li>
-                                <li>Soporte y monitoreo de impresoras / servidores / APs / Swtiches.</li>
-                                <li>Configuraciones y mantenimientos de hardware.</li>
-                                <li>Participación de forma activa conjunto al equipo de infraestructura con el fin de prevenir potenciales incidentes y detectar oportunidades de mejora.</li>
-                            </ul>
-                        </div>
-
-                        <!--Diseño web-->
-                        <div class="resume-item ">
-                            <h4>Diseñador Web Junior</h4>
-                            <!-- <h5>2019 - 2020</h5> -->
-                            <p><em>Freelance</em></p>
-                            <ul>
-                                <li>En conjunto a diversos compañeros hicimos algunas páginas web para unas empresas de Estados Unidos, y Argentina.</li>
-                                <li>Con ellos aprendí muchísimo del diseño web y cómo montar páginas.</li>
-                            </ul>
-                        </div>
-
-                        <!--Farmacia SAID-->
-                        <div class="resume-item">
-                            <h4>Soporte Ssr.</h4>
-                            <!-- <h5>2017 - 2019</h5> -->
-                            <p><em>Farmacia SAID.</em></p>
-                            <ul>
-                                <li>Responsable de diferentes sucursales todo lo que Microinformática respecta.</li>
-                                <li>Mantenimiento de los equipos, impresoras y laptops.</li>
-                                <li>Configuración de los equipos para trabajar con el servidor en común.</li>
-                                <li>Soporte Técnico on site. VIP.</li>
-                            </ul>
-                        </div>
-
-                        <!--Digitronics-->
-                        <div class="resume-item">
-                            <h4>Help-Desk / Soporte.</h4>
-                            <!-- <h5>2015 - 2017</h5> -->
-                            <p><em>Digitronics.</em></p>
-                            <ul>
-                                <li>Resolución de tickets nivel 1, 2.</li>
-                                <li>Mantenimiento de los equipos.</li>
-                                <li>Armado de computadoras, reparación de las mismas, laptops e impresoras/escaners.</li>
-                                <li>Configuración y entrega de equipos con diferentes sistemas operativos (Microsoft Windows, GNU Linux y MacOs).</li>
-                                <li>Soporte técnico al personal de la empresa (Local, remoto y telefónico).</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-        <!-- End Resume Section -->
-
-
-        <!-- ======= Portfolio Section ======= -->
-        <!--
-        <section id="portfolio" class="portfolio section-bg">
-            <div class="container">
-
-                <div class="section-title">
-                    <h2>Portfolio</h2>
-                    <p>Acá dejo mi portfolio personal, en los cuales únicamente participe yo. Hasta ahora son proyectos sin finalizar.</p>
-                </div>
-
-
-
-                <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="100">
-
-                    <div class="col-lg-4 col-md-6 portfolio-item ">
-
-                        <a href="https://www.tardesoscuras.ga" target="_blank"> <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt=""></a>
-
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 portfolio-item">
-
-                        <a href="https://www.infectedgaming.ga" target="_blank"><img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt=" "></a>
-
-                    </div>
-
-
-
-                </div>
-
-            </div>
-        </section>
-        -->
-        <!-- End Portfolio Section -->
-
-        <!-- ======= Testimonials Section ======= -->
-        <section id="testimonials" class="testimonials section-bg">
-            <div class="container">
-
-                <div class="section-title">
-                    <h2>Testimonios</h2>
-                    <p> Se me ocurrió hacer una pequeña lista de personas que puedan aportar algo a mi desempeño tanto como programador como persona.</p>
-                </div>
-
-                <div class="owl-carousel testimonials-carousel">
-
-                    <div class="testimonial-item" data-aos="fade-up">
-                        <p>
-                            <i class="bx bxs-quote-alt-left quote-icon-left"></i>Trabajar con Ignacio hace que ningún día sea el mismo.
-                            <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                        </p>
-                        <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt=" ">
-                        <h3>Gabriel DeLunardo</h3>
-                        <h4>FullStack Developer</h4>
-                    </div>
-
-                    <div class="testimonial-item" data-aos="fade-up" data-aos-delay="100">
-                        <p>
-                            <i class="bx bxs-quote-alt-left quote-icon-left"></i> Nacho es una persona creativa y muy ocurrente.
-                            <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                        </p>
-                        <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt=" ">
-                        <h3>León Saia</h3>
-                        <h4>Web Designer & Programmer</h4>
-                    </div>
-
-                    <div class="testimonial-item" data-aos="fade-up" data-aos-delay="200">
-
-                        <p>
-                            <i class="bx bxs-quote-alt-left quote-icon-left "></i> Nacho es de esas personas con las que podes hablar sin parar de todo.
-                            <i class="bx bxs-quote-alt-right quote-icon-right "></i>
-                        </p>
-                        <img src="assets/img/testimonials/testimonials-4.jpg " class="testimonial-img " alt=" ">
-                        <h3>Micaela Filandino</h3>
-                        <h4>Programmer & Professor</h4>
-                    </div>
-
-                    <div class="testimonial-item " data-aos="fade-up " data-aos-delay="300 ">
-                        <p>
-                            <i class="bx bxs-quote-alt-left quote-icon-left "></i> Cuando se le encomienda una tarea, concentra todos sus esfuerzos en resolverla.
-                            <i class="bx bxs-quote-alt-right quote-icon-right "></i>
-                        </p>
-                        <img src="assets/img/testimonials/testimonials-3.jpg " class="testimonial-img " alt=" ">
-                        <h3>Marcos Caro</h3>
-                        <h4>Psychologist.</h4>
-                    </div>
-
-                    <div class="testimonial-item " data-aos="fade-up " data-aos-delay="400 ">
-                        <p>
-                            <i class="bx bxs-quote-alt-left quote-icon-left "></i> Con Nacho siempre se aprenden cosas nuevas.
-                            <i class="bx bxs-quote-alt-right quote-icon-right "></i>
-                        </p>
-                        <img src="assets/img/testimonials/testimonials-5.jpg " class="testimonial-img " alt=" ">
-                        <h3>Rodrigo Trindade</h3>
-                        <h4>Mobile Tech Lead, Mobile FrontEnd & Android Developer</h4>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-        <!-- End Testimonials Section -->
-
-        <!-- ======= Contact Section ======= -->
-        <section id="contact" class="contact">
-            <div class="container">
-
-                <div class="section-title">
-                    <h2>Contacto</h2>
-                    <p> En el caso que me quieran enviar un mensaje via e-mail lo pueden hacer acá abajo, también dejo una zona aproximada a mi vivienda pero tengo que aclarar que tengo vehículo propio por lo cual la movilidad no sería nunca un problema.</p>
-                </div>
-
-                <div class="row" data-aos="fade-in">
-
-                    <div class="col-lg-5 d-flex align-items-stretch">
-                        <div class="info">
-                            <div class="address">
-                                <i class="icofont-google-map"></i>
-                                <h4>Ubicación</h4>
-                                <p>General Pacheco, Buenos Aires, Argentina</p>
-                            </div>
-
-                            <div class="email">
-                                <i class="icofont-envelope"></i>
-                                <h4>Email:</h4>
-                                <a href="mailto:ignacio.antu@gmail.com">
-                                    <p>ignacio.antu@gmail.com</p>
-                                </a>
-                            </div>
-
-                            <div class="phone">
-                                <i class="icofont-phone"></i>
-                                <h4>contacto:</h4>
-                                <a href="https://api.whatsapp.com/send?phone=541128524957&text=%20">
-                                    <p>+54 9 11 2852 4957</p>
-                                </a>
-                            </div>
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d52640.17919549232!2d-58.69972222988039!3d-34.451863583401035!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bca39ca574d823%3A0xd4fb0a11188d493e!2sGral.%20Pacheco%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses!2sar!4v1695931018126!5m2!1ses!2sar"
-                                frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe>
-                        </div>
-
-                    </div>
-                    <!-- <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-                        <form method="post" role="form" class="email-form">
-                            <div class="row">
-                                <div class="form-group col-md-6 ">
-                                    <label for="name">Nombre</label>
-                                    <input type="text" name="name" class="form-control" id="name" data-rule="minlen:4" data-msg="Por favor ingresar mínimo 3 dígitos" />
-                                    <div class="validate "></div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="name">Email</label>
-                                    <input type="email" class="form-control" name="email" id="email" data-rule="email" data-msg="Por favor ingresar un email válido" />
-                                    <div class="validate"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="name">Motivo</label>
-                                <input type="text" class="form-control" name="subject" id="subject" data-rule="minlen:8" data-msg="Por favor el motivo tiene que tener 8 dígitos mínimo" />
-                                <div class="validate "></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="name ">Mensaje</label>
-                                <textarea class="form-control" name="comments" id="comments" rows="13" data-rule="required" data-msg="Dejame un mensaje"></textarea>
-                                <div class="validate"></div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="loading ">Cargando</div>
-                                <div class="error-message"></div>
-                                <div class="sent-message">Tu mensaje fué enviado correctamente. Muchas gracias!</div>
-                            </div>
-                            <div class="text-center"><input type="button" value="Send Email" onclick="sendEmail()" /></div>
-                        </form>
-                    </div>
-
-                </div> -->
-                <!-- Email sending-->
-
-                <script src="https://smtpjs.com/v3/smtp.js"></script>
-                <script type="text/javascript">
-                    function sendEmail() {
-
-                        let name = valueById('name')
-                        let email = valueById('email')
-                        let subject = valueById('subject')
-                        let text = valueById('comments')
-
-                        Email.send({
-                                Host: "smtp.gmail.com",
-                                Username: "ignacio.antu@gmail.com",
-                                Password: "fqgowavhdwqkopuka3",
-                                To: 'ignacio.antu@gmail.com',
-                                From: email,
-                                Subject: name + " ; ; " + subject,
-                                Body: text,
-                            })
-                            .then(function(message) {
-                                alert("El mensaje se envió correctamente. Muchas gracias! ")
-                            });
-                    }
-
-                    function valueById(element) {
-                        return document.getElementById(element).value
-                    }
-                </script>
-
-                <!-- End Email sending -->
-            </div>
-        </section>
-        <!-- End Contact Section -->
-
-    </main>
-    <!-- End #main -->
-
-    <!-- ======= Footer ======= -->
-    <footer id="footer ">
-        <div class="container ">
-
+    <!-- GRID de fotos secundarias -->
+    <section class="card">
+      <h3 style="margin-top:0">Galería</h3>
+      <div class="gallery">
+        <img v-for="(g,i) in gallery" :key="'g'+i" :src="g.src" :alt="g.alt || 'Foto'">
+      </div>
+    </section>
+
+    <!-- Comentarios compartidos -->
+    <section class="card">
+      <div class="row">
+        <h3 style="margin:0">Comentarios</h3>
+        <button class="toggle" @click="fetchComments" aria-label="Recargar comentarios">🔄 Actualizar</button>
+      </div>
+
+      <form class="comment-form" @submit.prevent="submitComment">
+        <input type="text" v-model.trim="form.name" placeholder="Tu nombre">
+        <!-- honeypot anti-bots: mantén hidden -->
+        <input type="text" v-model="form.website" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <textarea v-model.trim="form.message" placeholder="Escribí un mensajito..."></textarea>
+        <div class="row">
+          <button class="primary">Enviar</button>
+          <small class="muted" v-if="status">{{ status }}</small>
         </div>
+      </form>
+
+      <div style="margin-top:16px">
+        <div class="comment" v-for="c in comments" :key="c.id">
+          <div class="name">{{ c.name }}</div>
+          <div class="muted" style="font-size:12px">{{ formatTs(c.ts) }}</div>
+          <div style="margin-top:6px; white-space:pre-wrap">{{ c.message }}</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="muted" style="text-align:center; margin:24px 0 12px 0">
+      © {{ new Date().getFullYear() }} antuña.com.ar 
     </footer>
-    <!-- End  Footer -->
+  </div>
 
-    <a href="#header " class="back-to-top "><i class="icofont-simple-up "></i></a>
+  <script>
+    const BACKEND_URL = "https://TU_BACKEND_URL"  // <-- Cambiá esto
 
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/jquery/jquery.min.js "></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js "></script>
-    <script src="assets/vendor/jquery.easing/jquery.easing.min.js "></script>
-    <script src="assets/vendor/php-email-form/validate.js "></script>
-    <script src="assets/vendor/waypoints/jquery.waypoints.min.js "></script>
-    <script src="assets/vendor/counterup/counterup.min.js "></script>
-    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js "></script>
-    <script src="assets/vendor/venobox/venobox.min.js "></script>
-    <script src="assets/vendor/owl.carousel/owl.carousel.min.js "></script>
-    <script src="assets/vendor/typed.js/typed.min.js "></script>
-    <script src="assets/vendor/aos/aos.js "></script>
-    <!-- Buy me a coffee Widget -->
+    const { createApp, onMounted, ref } = Vue
 
-    <!-- <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="NatGeo" data-description="Support me on Buy me a coffee!" data-message="Gracias por pasar por aca y si queres podes invitarme un cafe!"
-        data-color="#149ddd" data-position="Right" data-x_margin="18" data-y_margin="18"></script> -->
+    createApp({
+      setup(){
+        const theme = ref(localStorage.getItem("theme") || "light")
+        document.documentElement.setAttribute("data-theme", theme.value)
 
-    <!-- Template Main JS File -->
+        const index = ref(0)
+        const slides = ref([
+          { type: "image", src: "media/foto1.jpg", alt: "Tino sonriendo" },
+          { type: "image", src: "media/foto2.jpg", alt: "Paseo en familia" },
+          { type: "video", src: "media/video1.mp4", poster: "media/video1_poster.jpg", alt: "Primeros pasos" },
+          { type: "image", src: "media/foto3.jpg", alt: "Siesta" }
+        ])
+        const gallery = ref([
+          { src: "media/foto4.jpg" }, { src: "media/foto5.jpg" }, { src: "media/foto6.jpg" },
+          { src: "media/foto7.jpg" }, { src: "media/foto8.jpg" }, { src: "media/foto9.jpg" }
+        ])
 
-    <script src="assets/js/main.js "></script>
-    <script>
-        var year = new Date().getFullYear();
-        var month = new Date().getMonth() + 1;
-        var day = new Date().getDate();
-        var yo1 = "Hola, tengo ";
-        var yo2 = " años y me considero un entusiasta de la programación, videojuegos y tecnología en general. Actualmente estoy "
-        var EstudioActual = " estudiando  Tecnicatura Universitaria en Programación en la UTN de Pacheco. "
-        if (month >= 1 && day >= 18) {
+        const comments = ref([])
+        const status = ref("")
+        const form = ref({ name: "", message: "", website: "" })
+        const carousel = ref(null)
+        let autoTimer = null
 
-            var NewYear = year - 1993;
-            document.getElementById("yearR").innerHTML = yo1 + " " +
-                NewYear + " " + yo2 + " " + EstudioActual;
-        } else
-        if (month > 1) {
-
-            var NewYear = year - 1993;
-            document.getElementById("yearR").innerHTML = yo1 + " " +
-                NewYear + " " + yo2 + " " + EstudioActual;
-        } else
-        if (month = 1 && day < 18) {
-
-            var NewYear = year - 1993 - 1;
-            document.getElementById("yearR").innerHTML = yo1 + " " +
-                NewYear + " " + yo2 + " " + EstudioActual;
+        function slideStyle(i){
+          const offset = (i - index.value)
+          const translate = `translateX(${offset * 100}%)`
+          const visible = (i === index.value) ? 1 : 0
+          return {
+            transform: translate,
+            opacity: visible,
+            zIndex: (i === index.value) ? 2 : 1
+          }
         }
-        document.getElementById("day").innerHTML = NewYear;
-    </script>
-</body>
 
+        function next(){ index.value = (index.value + 1) % slides.value.length }
+        function prev(){ index.value = (index.value - 1 + slides.value.length) % slides.value.length }
+        function go(i){ index.value = i }
+
+        function startAuto(){
+          stopAuto()
+          autoTimer = setInterval(next, 6000)
+        }
+        function stopAuto(){
+          if (autoTimer) { clearInterval(autoTimer); autoTimer = null }
+        }
+
+        function toggleTheme(){
+          theme.value = (theme.value === "light" ? "dark" : "light")
+          document.documentElement.setAttribute("data-theme", theme.value)
+          localStorage.setItem("theme", theme.value)
+        }
+
+        async function fetchComments(){
+          try {
+            status.value = "Cargando..."
+            const r = await fetch(`${BACKEND_URL}/api/comments`, { credentials: "omit" })
+            const data = await r.json()
+            comments.value = (data && data.comments) ? data.comments : []
+            status.value = "Listo"
+            setTimeout(()=> status.value="", 800)
+          } catch (e){
+            status.value = "Error al cargar"
+          }
+        }
+
+        async function submitComment(){
+          if (!form.value.name || !form.value.message){
+            status.value = "Completá nombre y mensaje"
+            return
+          }
+          try {
+            status.value = "Enviando..."
+            const r = await fetch(`${BACKEND_URL}/api/comments`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(form.value),
+              credentials: "omit"
+            })
+            if (r.status === 429){
+              status.value = "Muy rápido 😅 probá en unos segundos"
+              return
+            }
+            const data = await r.json()
+            if (data.ok){
+              form.value.message = ""
+              await fetchComments()
+              status.value = "¡Enviado!"
+              setTimeout(()=> status.value="", 1000)
+            } else {
+              status.value = data.error || "No se pudo enviar"
+            }
+          } catch (e){
+            status.value = "Error de red"
+          }
+        }
+
+        function formatTs(ts){
+          try{
+            const d = new Date((ts||0)*1000)
+            return d.toLocaleString()
+          }catch{ return "" }
+        }
+
+        onMounted(()=>{
+          fetchComments()
+          startAuto()
+          // accesibilidad: foco para poder usar flechas ← →
+          setTimeout(()=>{ carousel.value && carousel.value.focus() }, 200)
+        })
+
+        return {
+          theme, toggleTheme,
+          index, slides, slideStyle, next, prev, go,
+          gallery,
+          comments, status, form, fetchComments, submitComment,
+          formatTs,
+          carousel
+        }
+      }
+    }).mount("#app")
+  </script>
+</body>
 </html>
