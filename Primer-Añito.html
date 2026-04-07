@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Brochure de Tino</title>
+  <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.prod.js"></script>
+  <link href="assets/css/style.css" rel="stylesheet">
+  
+  <style>
+   
+  </style>
+</head>
+<body>
+  <div id="app" class="wrap">
+    <header>
+      <div class="brand">
+        <img class="logo" src="avatar_tino.jpg" alt="Tino">
+        <div>
+          <h1>Recuerdos de Tino</h1>
+          <div class="muted">Fotos, videos y mensajitos de la familia 💛</div>
+        </div>
+      </div>
+      <button class="toggle" @click="toggleTheme">
+        <span v-if="theme==='light'">🌞 Modo claro</span>
+        <span v-else>🌙 Modo oscuro</span>
+      </button>
+    </header>
+
+    <!-- HERO: Carrusel + info -->
+    <section class="hero">
+      <div class="card">
+        <div class="carousel" @keydown.left.prevent="prev" @keydown.right.prevent="next" tabindex="0" ref="carousel">
+          <div class="slide"
+               v-for="(item,i) in slides"
+               :key="i"
+               :style="slideStyle(i)">
+            <img v-if="item.type==='image'" :src="item.src" :alt="item.alt || 'Foto'">
+            <video v-else controls :poster="item.poster || ''">
+              <source :src="item.src" type="video/mp4">
+            </video>
+          </div>
+          <div class="controls">
+            <button class="btn" @click="prev" aria-label="Anterior">‹</button>
+            <button class="btn" @click="next" aria-label="Siguiente">›</button>
+          </div>
+          <div class="indicators">
+            <button class="dot" v-for="(s,i) in slides" :key="'dot'+i" :class="{active: i===index}" @click="go(i)"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 8px 0;">Sobre este sitio</h2>
+        <p class="muted" style="margin:0">
+          Hecho con 💙 por papá y mamá. Navegá el carrusel, mirá el grid de fotos, y dejá un comentario.
+        </p>
+      </div>
+    </section>
+
+    <!-- GRID de fotos secundarias -->
+    <section class="card">
+      <h3 style="margin-top:0">Galería</h3>
+      <div class="gallery">
+        <img v-for="(g,i) in gallery" :key="'g'+i" :src="g.src" :alt="g.alt || 'Foto'">
+      </div>
+    </section>
+
+    <!-- Comentarios compartidos -->
+    <section class="card">
+      <div class="row">
+        <h3 style="margin:0">Comentarios</h3>
+        <button class="toggle" @click="fetchComments" aria-label="Recargar comentarios">🔄 Actualizar</button>
+      </div>
+
+      <form class="comment-form" @submit.prevent="submitComment">
+        <input type="text" v-model.trim="form.name" placeholder="Tu nombre">
+        <!-- honeypot anti-bots: mantén hidden -->
+        <input type="text" v-model="form.website" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <textarea v-model.trim="form.message" placeholder="Escribí un mensajito..."></textarea>
+        <div class="row">
+          <button class="primary">Enviar</button>
+          <small class="muted" v-if="status">{{ status }}</small>
+        </div>
+      </form>
+
+      <div style="margin-top:16px">
+        <div class="comment" v-for="c in comments" :key="c.id">
+          <div class="name">{{ c.name }}</div>
+          <div class="muted" style="font-size:12px">{{ formatTs(c.ts) }}</div>
+          <div style="margin-top:6px; white-space:pre-wrap">{{ c.message }}</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="muted" style="text-align:center; margin:24px 0 12px 0">
+      © {{ new Date().getFullYear() }} antuña.com.ar — Hecho con Vue + Flask
+    </footer>
+  </div>
+
+  <script>
+    const BACKEND_URL = "https://TU_BACKEND_URL"  // <-- Cambiá esto
+
+    const { createApp, onMounted, ref } = Vue
+
+    createApp({
+      setup(){
+        const theme = ref(localStorage.getItem("theme") || "light")
+        document.documentElement.setAttribute("data-theme", theme.value)
+
+        const index = ref(0)
+        const slides = ref([
+          { type: "image", src: "media/foto1.jpg", alt: "Tino sonriendo" },
+          { type: "image", src: "media/foto2.jpg", alt: "Paseo en familia" },
+          { type: "video", src: "media/video1.mp4", poster: "media/video1_poster.jpg", alt: "Primeros pasos" },
+          { type: "image", src: "media/foto3.jpg", alt: "Siesta" }
+        ])
+        const gallery = ref([
+          { src: "media/foto4.jpg" }, { src: "media/foto5.jpg" }, { src: "media/foto6.jpg" },
+          { src: "media/foto7.jpg" }, { src: "media/foto8.jpg" }, { src: "media/foto9.jpg" }
+        ])
+
+        const comments = ref([])
+        const status = ref("")
+        const form = ref({ name: "", message: "", website: "" })
+        const carousel = ref(null)
+        let autoTimer = null
+
+        function slideStyle(i){
+          const offset = (i - index.value)
+          const translate = `translateX(${offset * 100}%)`
+          const visible = (i === index.value) ? 1 : 0
+          return {
+            transform: translate,
+            opacity: visible,
+            zIndex: (i === index.value) ? 2 : 1
+          }
+        }
+
+        function next(){ index.value = (index.value + 1) % slides.value.length }
+        function prev(){ index.value = (index.value - 1 + slides.value.length) % slides.value.length }
+        function go(i){ index.value = i }
+
+        function startAuto(){
+          stopAuto()
+          autoTimer = setInterval(next, 6000)
+        }
+        function stopAuto(){
+          if (autoTimer) { clearInterval(autoTimer); autoTimer = null }
+        }
+
+        function toggleTheme(){
+          theme.value = (theme.value === "light" ? "dark" : "light")
+          document.documentElement.setAttribute("data-theme", theme.value)
+          localStorage.setItem("theme", theme.value)
+        }
+
+        async function fetchComments(){
+          try {
+            status.value = "Cargando..."
+            const r = await fetch(`${BACKEND_URL}/api/comments`, { credentials: "omit" })
+            const data = await r.json()
+            comments.value = (data && data.comments) ? data.comments : []
+            status.value = "Listo"
+            setTimeout(()=> status.value="", 800)
+          } catch (e){
+            status.value = "Error al cargar"
+          }
+        }
+
+        async function submitComment(){
+          if (!form.value.name || !form.value.message){
+            status.value = "Completá nombre y mensaje"
+            return
+          }
+          try {
+            status.value = "Enviando..."
+            const r = await fetch(`${BACKEND_URL}/api/comments`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(form.value),
+              credentials: "omit"
+            })
+            if (r.status === 429){
+              status.value = "Muy rápido 😅 probá en unos segundos"
+              return
+            }
+            const data = await r.json()
+            if (data.ok){
+              form.value.message = ""
+              await fetchComments()
+              status.value = "¡Enviado!"
+              setTimeout(()=> status.value="", 1000)
+            } else {
+              status.value = data.error || "No se pudo enviar"
+            }
+          } catch (e){
+            status.value = "Error de red"
+          }
+        }
+
+        function formatTs(ts){
+          try{
+            const d = new Date((ts||0)*1000)
+            return d.toLocaleString()
+          }catch{ return "" }
+        }
+
+        onMounted(()=>{
+          fetchComments()
+          startAuto()
+          // accesibilidad: foco para poder usar flechas ← →
+          setTimeout(()=>{ carousel.value && carousel.value.focus() }, 200)
+        })
+
+        return {
+          theme, toggleTheme,
+          index, slides, slideStyle, next, prev, go,
+          gallery,
+          comments, status, form, fetchComments, submitComment,
+          formatTs,
+          carousel
+        }
+      }
+    }).mount("#app")
+  </script>
+</body>
+</html>

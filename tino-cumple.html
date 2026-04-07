@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tino cumple un añito 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #5bbf3c;
+    --naranja: #f7941d;
+    --amarillo: #ffe135;
+    --celeste: #4dc8e8;
+    --rojo: #e8433a;
+    --crema: #fffbe8;
+    --verde-oscuro: #2e7d32;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--crema);
+    overflow-x: hidden;
+  }
+
+  /* ===== CONFETTI ANIMADO ===== */
+  .confetti-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .dot {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: caer linear infinite;
+  }
+
+  @keyframes caer {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 0.7; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ===== SECCIONES ===== */
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: #fffde4;
+    background-image:
+      repeating-linear-gradient(
+        45deg,
+        #f9e84a22 0px, #f9e84a22 20px,
+        transparent 20px, transparent 40px
+      );
+    padding: 60px 20px 40px;
+    text-align: center;
+    border-bottom: 6px solid var(--naranja);
+  }
+
+  .hero-top-badge {
+    display: inline-block;
+    background: var(--verde);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    padding: 6px 18px;
+    border-radius: 30px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 0 var(--verde-oscuro);
+  }
+
+  .hero-nombre {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(4rem, 18vw, 9rem);
+    color: var(--celeste);
+    text-shadow:
+      4px 4px 0 #2a9db8,
+      8px 8px 0 #1a6e80;
+    line-height: 0.9;
+    letter-spacing: -2px;
+    animation: wobble 3s ease-in-out infinite;
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+
+  .hero-subtitulo {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.4rem, 5vw, 2.5rem);
+    color: var(--naranja);
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  .foto-hero {
+    width: clamp(130px, 35vw, 200px);
+    height: clamp(130px, 35vw, 200px);
+    border-radius: 50%;
+    border: 8px solid white;
+    box-shadow: 0 0 0 6px var(--naranja), 0 12px 30px rgba(0,0,0,0.15);
+    object-fit: cover;
+    margin: 25px auto 0;
+    display: block;
+    background: linear-gradient(135deg, #ffecd2, #fcb69f);
+    animation: pulse-photo 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-photo {
+    0%, 100% { box-shadow: 0 0 0 6px var(--naranja), 0 12px 30px rgba(0,0,0,0.15); }
+    50% { box-shadow: 0 0 0 10px var(--amarillo), 0 16px 40px rgba(0,0,0,0.2); }
+  }
+
+  .foto-placeholder {
+    width: clamp(130px, 35vw, 200px);
+    height: clamp(130px, 35vw, 200px);
+    border-radius: 50%;
+    border: 8px solid white;
+    box-shadow: 0 0 0 6px var(--naranja), 0 12px 30px rgba(0,0,0,0.15);
+    margin: 25px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    background: linear-gradient(135deg, #ffecd2, #fcb69f);
+    animation: pulse-photo 2s ease-in-out infinite;
+  }
+
+  /* Animales decorativos SVG */
+  .animales-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0 0;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    flex-wrap: wrap;
+  }
+
+  .animal {
+    animation: bounceAnimal 1.5s ease-in-out infinite;
+    display: inline-block;
+  }
+  .animal:nth-child(1) { animation-delay: 0s; }
+  .animal:nth-child(2) { animation-delay: 0.2s; }
+  .animal:nth-child(3) { animation-delay: 0.4s; }
+  .animal:nth-child(4) { animation-delay: 0.6s; }
+  .animal:nth-child(5) { animation-delay: 0.8s; }
+
+  @keyframes bounceAnimal {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* ===== FRANJA CUADRILLÉ ===== */
+  .franja-cuadrille {
+    height: 18px;
+    background-image:
+      repeating-conic-gradient(var(--naranja) 0% 25%, #ffd580 0% 50%) 0 0 / 18px 18px;
+  }
+
+  /* ===== SECCIÓN INVITACIÓN ===== */
+  .invitacion {
+    background: white;
+    padding: 50px 24px;
+    text-align: center;
+    position: relative;
+  }
+
+  .invitacion::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(90deg, var(--verde) 0, var(--verde) 20px, var(--amarillo) 20px, var(--amarillo) 40px, var(--naranja) 40px, var(--naranja) 60px, var(--celeste) 60px, var(--celeste) 80px);
+  }
+
+  .invitacion-texto {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color: #555;
+    line-height: 1.8;
+    max-width: 500px;
+    margin: 0 auto 30px;
+    font-weight: 600;
+  }
+
+  .invitacion-texto strong {
+    color: var(--verde-oscuro);
+  }
+
+  /* ===== FOTO GRID ===== */
+  .fotos-section {
+    background: #1a1a1a;
+    padding: 40px 16px;
+    text-align: center;
+    border-top: 6px solid var(--amarillo);
+    border-bottom: 6px solid var(--amarillo);
+  }
+
+  .fotos-titulo {
+    font-family: 'Fredoka One', cursive;
+    color: var(--amarillo);
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+  }
+
+  .fotos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .foto-mes {
+    aspect-ratio: 1;
+    background: #333;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: #888;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .foto-mes:hover {
+    transform: scale(1.04);
+  }
+
+  .foto-mes .mes-label {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  /* ===== SECCIÓN FECHA ===== */
+  .fecha-section {
+    background: var(--crema);
+    padding: 50px 24px;
+    text-align: center;
+  }
+
+  .icon-grande {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .mes-tag {
+    display: inline-block;
+    background: var(--naranja);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    padding: 6px 20px;
+    border-radius: 8px 8px 0 0;
+    letter-spacing: 2px;
+    margin-bottom: 0;
+  }
+
+  .fecha-card {
+    background: white;
+    border: 3px solid var(--naranja);
+    border-radius: 0 16px 16px 16px;
+    padding: 20px 30px;
+    display: inline-block;
+    margin-bottom: 30px;
+    box-shadow: 6px 6px 0 var(--naranja);
+  }
+
+  .fecha-dia {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(3.5rem, 14vw, 6rem);
+    color: var(--verde);
+    line-height: 1;
+  }
+
+  .fecha-diaNombre {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    color: #888;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .fecha-hora {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6rem;
+    color: var(--naranja);
+    margin-top: 8px;
+  }
+
+  /* ===== BOTONES ===== */
+  .btn {
+    display: inline-block;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    padding: 14px 36px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn:active { transform: translateY(3px); }
+
+  .btn-agendar {
+    background: var(--verde);
+    color: white;
+    box-shadow: 0 5px 0 var(--verde-oscuro);
+    margin: 10px;
+  }
+  .btn-agendar:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--verde-oscuro); }
+
+  .btn-mapa {
+    background: var(--celeste);
+    color: white;
+    box-shadow: 0 5px 0 #2a8da8;
+    margin: 10px;
+  }
+  .btn-mapa:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #2a8da8; }
+
+  .btn-confirmar {
+    background: var(--rojo);
+    color: white;
+    box-shadow: 0 5px 0 #a8281f;
+    margin: 10px;
+    font-size: 1.3rem;
+    padding: 16px 50px;
+    animation: latido 1.8s ease-in-out infinite;
+  }
+
+  @keyframes latido {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* ===== LUGAR ===== */
+  .lugar-section {
+    background: white;
+    padding: 50px 24px;
+    text-align: center;
+    border-top: 6px solid var(--verde);
+  }
+
+  .lugar-card {
+    background: var(--crema);
+    border: 3px solid var(--verde);
+    border-radius: 20px;
+    padding: 25px 20px;
+    max-width: 360px;
+    margin: 0 auto 25px;
+    box-shadow: 6px 6px 0 var(--verde);
+  }
+
+  .lugar-nombre {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6rem;
+    color: var(--verde-oscuro);
+    margin-bottom: 8px;
+  }
+
+  .lugar-dir {
+    font-size: 1rem;
+    color: #666;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
+  /* ===== MENSAJE ESPECIAL ===== */
+  .mensaje-section {
+    background: linear-gradient(135deg, #fff9e6 0%, #fff0d4 100%);
+    padding: 50px 24px;
+    text-align: center;
+    border-top: 6px dashed var(--amarillo);
+  }
+
+  .mensaje-burbuja {
+    background: white;
+    border: 3px solid var(--naranja);
+    border-radius: 20px;
+    padding: 25px;
+    max-width: 400px;
+    margin: 0 auto 30px;
+    position: relative;
+    box-shadow: 0 8px 20px rgba(247,148,29,0.15);
+  }
+
+  .mensaje-burbuja::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-top-color: var(--naranja);
+  }
+
+  .mensaje-burbuja::before {
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: white;
+    z-index: 1;
+  }
+
+  .mensaje-texto {
+    font-size: clamp(0.95rem, 3vw, 1.1rem);
+    color: #444;
+    line-height: 1.8;
+    font-weight: 700;
+  }
+
+  .foto-footer {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 5px solid var(--naranja);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background: linear-gradient(135deg, #ffecd2, #fcb69f);
+    margin: 30px auto 0;
+  }
+
+  /* ===== CONFIRMAR SECTION ===== */
+  .confirmar-section {
+    background: var(--verde);
+    padding: 50px 24px;
+    text-align: center;
+    border-top: 6px solid var(--verde-oscuro);
+  }
+
+  .confirmar-titulo {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+    color: white;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+  }
+
+  .confirmar-sub {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    font-weight: 600;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #1a1a1a;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* ===== TITULOS DE SECCION ===== */
+  .seccion-titulo {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+    margin-bottom: 8px;
+  }
+
+  .seccion-subtitulo {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 30px;
+  }
+
+  /* ===== SEPARADOR ANIMALES ===== */
+  .separador-animales {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0;
+    background: var(--amarillo);
+    font-size: 1.4rem;
+    overflow: hidden;
+  }
+
+  /* ===== SCROLL REVEAL ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 400px) {
+    .fotos-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+    .btn-confirmar { font-size: 1.1rem; padding: 14px 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CONFETTI ANIMADO -->
+<div class="confetti-bg" id="confetti"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-top-badge">🎂 ¡PRIMER AÑITO!</div>
+  <div class="hero-nombre">Tino</div>
+  <div class="hero-subtitulo">cumple un añito 🎉</div>
+  <div class="foto-placeholder">👶</div>
+  <div class="animales-row">
+    <span class="animal">🦁</span>
+    <span class="animal">🐊</span>
+    <span class="animal">🦒</span>
+    <span class="animal">🐻</span>
+    <span class="animal">🐘</span>
+  </div>
+</section>
+
+<!-- FRANJA -->
+<div class="franja-cuadrille"></div>
+
+<!-- INVITACIÓN -->
+<section class="invitacion reveal">
+  <div class="seccion-titulo" style="color: var(--naranja);">¡Te invito a festejar!</div>
+  <div class="seccion-subtitulo" style="color: var(--naranja);">🎈 mi primer añito 🎈</div>
+  <p class="invitacion-texto">
+    Gracias por acompañarme en cada mes de este primer año.<br>
+    Ahora te invito a celebrar juntos <strong>mi primer añito</strong><br>
+    y seguir creando recuerdos. 💛
+  </p>
+</section>
+
+<!-- SEPARADOR -->
+<div class="separador-animales">
+  🎉 &nbsp; 🦁 &nbsp; 🌟 &nbsp; 🐊 &nbsp; 🎈 &nbsp; 🦒 &nbsp; ✨ &nbsp; 🐘 &nbsp; 🎊 &nbsp; 🐻 &nbsp; 🌈 &nbsp; 🎉
+</div>
+
+<!-- FOTOS CRECIENDO -->
+<section class="fotos-section">
+  <div class="fotos-titulo reveal">Así fui creciendo 📸</div>
+  <div class="fotos-grid reveal">
+    <div class="foto-mes">👶<span class="mes-label">Mes 1</span></div>
+    <div class="foto-mes">👶<span class="mes-label">Mes 2</span></div>
+    <div class="foto-mes">👶<span class="mes-label">Mes 3</span></div>
+    <div class="foto-mes">👶<span class="mes-label">Mes 4</span></div>
+    <div class="foto-mes">👶<span class="mes-label">Mes 5</span></div>
+    <div class="foto-mes">👶<span class="mes-label">Mes 6</span></div>
+    <div class="foto-mes">👶<span class="mes-label">Mes 7</span></div>
+    <div class="foto-mes">👶<span class="mes-label">Mes 8</span></div>
+    <div class="foto-mes">👶<span class="mes-label">Mes 9</span></div>
+    <div class="foto-mes">👶<span class="mes-label">Mes 10</span></div>
+    <div class="foto-mes">👶<span class="mes-label">Mes 11</span></div>
+    <div class="foto-mes" style="background: var(--naranja); font-size: 2.5rem;">🎂<span class="mes-label" style="background: var(--verde);">¡1 año!</span></div>
+  </div>
+  <p style="color: #888; font-size: 0.8rem; margin-top: 16px; font-weight: 600;">📷 Reemplazá los emojis con las fotos de Tino</p>
+</section>
+
+<!-- SEPARADOR -->
+<div class="separador-animales">
+  ⭐ &nbsp; 🎠 &nbsp; 🌻 &nbsp; 🎡 &nbsp; ⭐ &nbsp; 🎠 &nbsp; 🌻 &nbsp; 🎡 &nbsp; ⭐ &nbsp; 🎠 &nbsp; 🌻
+</div>
+
+<!-- FECHA -->
+<section class="fecha-section reveal">
+  <div class="seccion-titulo" style="color: var(--celeste);">¿Cuándo? 📅</div>
+  <span class="icon-grande">🗓️</span>
+  <div>
+    <span class="mes-tag">MAYO</span>
+    <div class="fecha-card">
+      <div class="fecha-diaNombre">Viernes</div>
+      <div class="fecha-dia">1</div>
+      <div class="fecha-hora">🕑 13 a 17 hs</div>
+    </div>
+  </div>
+  <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Cumple+de+Tino+%F0%9F%8E%82&dates=20250501T130000/20250501T170000&details=Primer+a%C3%B1ito+de+Tino&location=Sal%C3%B3n+El+Patac%C3%B3n%2C+Calle+Col%C3%B3n+363%2C+Don+Torcuato%2C+Tigre"
+     target="_blank" class="btn btn-agendar">📅 AGENDAR</a>
+</section>
+
+<!-- LUGAR -->
+<section class="lugar-section reveal">
+  <div class="seccion-titulo" style="color: var(--verde);">¿Dónde? 📍</div>
+  <span class="icon-grande">📍</span>
+  <div class="lugar-card">
+    <div class="lugar-nombre">Salón "El Patacón"</div>
+    <div class="lugar-dir">
+      Calle Colón 363<br>
+      Don Torcuato, Tigre
+    </div>
+  </div>
+  <a href="https://maps.google.com/?q=Calle+Colón+363,+Don+Torcuato,+Tigre,+Buenos+Aires"
+     target="_blank" class="btn btn-mapa">🗺️ VER EN MAPA</a>
+</section>
+
+<!-- SEPARADOR -->
+<div class="franja-cuadrille"></div>
+
+<!-- MENSAJE ESPECIAL -->
+<section class="mensaje-section reveal">
+  <div class="seccion-titulo" style="color: var(--naranja);">Te espero para festejar… 🥳</div>
+  <div class="seccion-subtitulo" style="color: var(--naranja);">¡pero no te olvides de!</div>
+  <div class="mensaje-burbuja">
+    <p class="mensaje-texto">
+      Para mi cumple quiero que vengas con
+      <strong>🦟 off para los mosquitos</strong>,
+      tu <strong>☕ mate si querés</strong>,
+      mucha <strong>😄 alegría</strong>,
+      a divertirte mucho
+      y a darme muchos <strong>😘 besitos</strong>
+    </p>
+  </div>
+  <div class="foto-footer">😄</div>
+</section>
+
+<!-- CONFIRMAR -->
+<section class="confirmar-section reveal">
+  <div class="confirmar-titulo">¡No faltés! ✨</div>
+  <p class="confirmar-sub">Confirmá tu asistencia para que te esperemos</p>
+  <a href="https://wa.me/?text=¡Confirmo+asistencia+al+cumple+de+Tino!+🎂"
+     target="_blank" class="btn btn-confirmar">✅ CONFIRMAR</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  🦁 con amor para Tino 🦁 · primer añito · mayo 2025
+</footer>
+
+<script>
+  // ===== CONFETTI =====
+  const confettiColors = ['#5bbf3c','#f7941d','#ffe135','#4dc8e8','#e8433a','#ff85c2','#a855f7'];
+  const container = document.getElementById('confetti');
+  for (let i = 0; i < 35; i++) {
+    const dot = document.createElement('div');
+    dot.classList.add('dot');
+    const size = Math.random() * 12 + 5;
+    dot.style.cssText = `
+      width: ${size}px;
+      height: ${size}px;
+      background: ${confettiColors[Math.floor(Math.random() * confettiColors.length)]};
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * -100}px;
+      animation-duration: ${Math.random() * 8 + 6}s;
+      animation-delay: ${Math.random() * 8}s;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '3px'};
+    `;
+    container.appendChild(dot);
+  }
+
+  // ===== SCROLL REVEAL =====
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
