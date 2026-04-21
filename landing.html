@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NeoStack — Webs, E-commerce & Domótica</title>
+<meta name="description" content="Creamos sitios web, tiendas online y sistemas de domótica a medida. Tecnología que transforma tu negocio y tu hogar." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+        colors: {
+          ink: {
+            950: '#07070d',
+            900: '#0b0b14',
+            800: '#11111d',
+            700: '#1a1a2b',
+          },
+          neon: {
+            violet: '#8b5cf6',
+            cyan: '#22d3ee',
+            pink: '#ec4899',
+            lime: '#a3e635',
+          }
+        },
+        boxShadow: {
+          glow: '0 0 20px rgba(139,92,246,.45), 0 0 60px rgba(34,211,238,.25)',
+          glowCyan: '0 0 25px rgba(34,211,238,.45)',
+        },
+        animation: {
+          'gradient-x': 'gradient-x 8s ease infinite',
+          'float': 'float 6s ease-in-out infinite',
+          'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        },
+        keyframes: {
+          'gradient-x': {
+            '0%, 100%': { 'background-position': '0% 50%' },
+            '50%': { 'background-position': '100% 50%' },
+          },
+          'float': {
+            '0%, 100%': { transform: 'translateY(0px)' },
+            '50%': { transform: 'translateY(-15px)' },
+          },
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,0.25), transparent 60%),
+      radial-gradient(900px 500px at 100% 10%, rgba(34,211,238,0.18), transparent 60%),
+      radial-gradient(800px 500px at 50% 120%, rgba(236,72,153,0.15), transparent 60%),
+      #07070d;
+    color: #e6e6f0;
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(139,92,246,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139,92,246,0.07) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+  }
+  .text-gradient {
+    background: linear-gradient(90deg, #22d3ee, #8b5cf6, #ec4899, #22d3ee);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient-x 8s ease infinite;
+  }
+  .glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .card {
+    position: relative;
+    border-radius: 1.25rem;
+    transition: transform .4s ease, border-color .4s ease, box-shadow .4s ease;
+  }
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit; padding: 1px;
+    background: linear-gradient(135deg, rgba(139,92,246,.6), rgba(34,211,238,.4), rgba(236,72,153,.4));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity: .35; transition: opacity .4s ease;
+    pointer-events: none;
+  }
+  .card:hover { transform: translateY(-6px); }
+  .card:hover::before { opacity: 1; }
+  .card:hover { box-shadow: 0 30px 60px -20px rgba(139,92,246,.35), 0 0 0 1px rgba(139,92,246,.2); }
+  .btn-primary {
+    background: linear-gradient(135deg, #8b5cf6, #22d3ee);
+    box-shadow: 0 10px 30px -10px rgba(139,92,246,.7);
+    transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 15px 40px -10px rgba(139,92,246,.9); }
+  .btn-ghost {
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.02);
+    transition: all .2s ease;
+  }
+  .btn-ghost:hover { border-color: rgba(34,211,238,.5); color: #22d3ee; box-shadow: 0 0 20px rgba(34,211,238,.2); }
+  .chip {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .35rem .75rem; border-radius: 999px;
+    background: rgba(139,92,246,.12);
+    border: 1px solid rgba(139,92,246,.35);
+    color: #c4b5fd; font-size: .75rem; letter-spacing: .04em;
+  }
+  .dot {
+    width: 6px; height: 6px; border-radius: 999px;
+    background: #a3e635; box-shadow: 0 0 8px #a3e635;
+  }
+  /* Cart drawer */
+  .drawer { transform: translateX(100%); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+  .drawer.open { transform: translateX(0); }
+  .scrim { opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+  /* FAQ */
+  details[open] summary .chev { transform: rotate(180deg); }
+  summary::-webkit-details-marker { display: none; }
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #0b0b14; }
+  ::-webkit-scrollbar-thumb { background: #1a1a2b; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2a2a44; }
+
+  /* Floating add-to-cart feedback */
+  .toast {
+    position: fixed; left: 50%; top: 88px; transform: translate(-50%, -20px);
+    opacity: 0; pointer-events: none;
+    background: rgba(10,10,20,.9); border: 1px solid rgba(34,211,238,.4);
+    color: #e0f2fe; padding: .75rem 1.1rem; border-radius: 999px;
+    font-size: .9rem; letter-spacing: .02em;
+    box-shadow: 0 10px 30px rgba(34,211,238,.25);
+    transition: opacity .25s ease, transform .25s ease;
+    z-index: 80;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-width: 640px) {
+    .hero-title { font-size: 2.6rem; line-height: 1.05; }
+  }
+</style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden">
+
+<!-- NAV -->
+<header class="fixed top-0 inset-x-0 z-50">
+  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-3">
+    <div class="glass rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-2 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-neon-violet via-neon-cyan to-neon-pink p-[2px]">
+          <div class="w-full h-full rounded-[10px] bg-ink-950 flex items-center justify-center">
+            <span class="font-bold text-sm text-gradient">NS</span>
+          </div>
+        </div>
+        <span class="font-semibold tracking-tight">NeoStack</span>
+      </a>
+      <div class="hidden md:flex items-center gap-7 text-sm text-white/70">
+        <a href="#servicios" class="hover:text-white transition">Servicios</a>
+        <a href="#proceso" class="hover:text-white transition">Proceso</a>
+        <a href="#faq" class="hover:text-white transition">FAQ</a>
+        <a href="#contacto" class="hover:text-white transition">Contacto</a>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="#servicios" class="hidden sm:inline-flex btn-primary text-white font-medium px-4 py-2 rounded-xl text-sm">Empezar</a>
+        <button id="cartBtn" class="relative btn-ghost rounded-xl p-2.5" aria-label="Abrir carrito">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span id="cartBadge" class="hidden absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-neon-pink text-white text-[11px] font-semibold flex items-center justify-center shadow-[0_0_12px_rgba(236,72,153,.7)]">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section id="top" class="relative pt-36 pb-24 sm:pt-44 sm:pb-32">
+  <div class="absolute inset-0 grid-bg"></div>
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 chip mb-6">
+        <span class="dot"></span>
+        <span class="font-mono">v2026 · Aceptando nuevos proyectos</span>
+      </div>
+      <h1 class="hero-title text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight">
+        Construimos <span class="text-gradient">tecnología</span><br/>
+        que se nota.
+      </h1>
+      <p class="mt-6 text-lg sm:text-xl text-white/70 max-w-2xl mx-auto">
+        Sitios web, tiendas online y domótica para hogares inteligentes. Diseño cuidado, código limpio y soporte real. Elegí tus servicios y armamos el presupuesto en minutos.
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#servicios" class="btn-primary text-white font-semibold px-7 py-3.5 rounded-xl w-full sm:w-auto">Ver servicios</a>
+        <a href="#proceso" class="btn-ghost text-white/90 font-medium px-7 py-3.5 rounded-xl w-full sm:w-auto">Cómo trabajamos</a>
+      </div>
+
+      <!-- Stats -->
+      <div class="mt-16 grid grid-cols-3 gap-3 sm:gap-8 max-w-2xl mx-auto">
+        <div class="glass rounded-2xl px-4 py-5 text-center">
+          <div class="text-2xl sm:text-3xl font-bold text-gradient">+80</div>
+          <div class="text-xs sm:text-sm text-white/60 mt-1">Proyectos entregados</div>
+        </div>
+        <div class="glass rounded-2xl px-4 py-5 text-center">
+          <div class="text-2xl sm:text-3xl font-bold text-gradient">7d</div>
+          <div class="text-xs sm:text-sm text-white/60 mt-1">Entrega promedio</div>
+        </div>
+        <div class="glass rounded-2xl px-4 py-5 text-center">
+          <div class="text-2xl sm:text-3xl font-bold text-gradient">24/7</div>
+          <div class="text-xs sm:text-sm text-white/60 mt-1">Soporte técnico</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS / STACK -->
+<section class="py-8 border-y border-white/5 bg-black/20">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <p class="text-center text-xs uppercase tracking-[.25em] text-white/40 mb-5 font-mono">Stack & integraciones</p>
+    <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-white/50 text-sm">
+      <span>Next.js</span><span>·</span>
+      <span>React</span><span>·</span>
+      <span>Shopify</span><span>·</span>
+      <span>WooCommerce</span><span>·</span>
+      <span>Home Assistant</span><span>·</span>
+      <span>Zigbee2MQTT</span><span>·</span>
+      <span>Stripe</span><span>·</span>
+      <span>Mercado Pago</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios" class="py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl">
+      <p class="chip mb-4"><span class="dot"></span><span class="font-mono">Servicios</span></p>
+      <h2 class="text-4xl sm:text-5xl font-bold tracking-tight">Elegí lo que necesitás.</h2>
+      <p class="mt-4 text-white/70 text-lg">Agregá servicios al carrito y coordinamos el resto por WhatsApp. Sin letra chica.</p>
+    </div>
+
+    <div id="servicesGrid" class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <!-- cards inyectadas por JS -->
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES / WHY -->
+<section class="py-24 bg-gradient-to-b from-transparent via-black/20 to-transparent">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <p class="chip mb-4"><span class="dot"></span><span class="font-mono">Por qué NeoStack</span></p>
+        <h2 class="text-4xl sm:text-5xl font-bold tracking-tight">Diseño + código + automatización, en un mismo equipo.</h2>
+        <p class="mt-5 text-white/70 text-lg">No somos freelance genérico. Hacemos foco en experiencia de usuario, performance y automatización real — del sitio al hogar.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="card glass p-6">
+          <div class="w-10 h-10 rounded-lg bg-neon-violet/20 border border-neon-violet/40 flex items-center justify-center mb-4">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>
+          </div>
+          <h3 class="font-semibold">Velocidad real</h3>
+          <p class="text-sm text-white/60 mt-1">Puntajes Lighthouse 95+ y carga instantánea.</p>
+        </div>
+        <div class="card glass p-6">
+          <div class="w-10 h-10 rounded-lg bg-neon-cyan/20 border border-neon-cyan/40 flex items-center justify-center mb-4">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="12" rx="2"/><line x1="8" y1="20" x2="16" y2="20"/><line x1="12" y1="16" x2="12" y2="20"/></svg>
+          </div>
+          <h3 class="font-semibold">Responsive 100%</h3>
+          <p class="text-sm text-white/60 mt-1">Perfecto en mobile, tablet y desktop.</p>
+        </div>
+        <div class="card glass p-6">
+          <div class="w-10 h-10 rounded-lg bg-neon-pink/20 border border-neon-pink/40 flex items-center justify-center mb-4">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f9a8d4" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="font-semibold">Seguro</h3>
+          <p class="text-sm text-white/60 mt-1">HTTPS, backups, buenas prácticas desde el día 1.</p>
+        </div>
+        <div class="card glass p-6">
+          <div class="w-10 h-10 rounded-lg bg-neon-lime/20 border border-neon-lime/40 flex items-center justify-center mb-4">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#bef264" stroke-width="2" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          </div>
+          <h3 class="font-semibold">Automatizado</h3>
+          <p class="text-sm text-white/60 mt-1">Domótica y flujos que te ahorran tiempo cada día.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso" class="py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl">
+      <p class="chip mb-4"><span class="dot"></span><span class="font-mono">Proceso</span></p>
+      <h2 class="text-4xl sm:text-5xl font-bold tracking-tight">De la idea al deploy en 4 pasos.</h2>
+    </div>
+    <div class="mt-12 grid md:grid-cols-4 gap-6">
+      <div class="card glass p-6">
+        <div class="font-mono text-xs text-neon-cyan">01</div>
+        <h3 class="mt-3 font-semibold text-lg">Brief</h3>
+        <p class="mt-2 text-white/60 text-sm">Charlamos por WhatsApp y definimos objetivos.</p>
+      </div>
+      <div class="card glass p-6">
+        <div class="font-mono text-xs text-neon-cyan">02</div>
+        <h3 class="mt-3 font-semibold text-lg">Diseño</h3>
+        <p class="mt-2 text-white/60 text-sm">Propuesta visual y arquitectura de contenido.</p>
+      </div>
+      <div class="card glass p-6">
+        <div class="font-mono text-xs text-neon-cyan">03</div>
+        <h3 class="mt-3 font-semibold text-lg">Desarrollo</h3>
+        <p class="mt-2 text-white/60 text-sm">Sprints cortos con entregas revisables.</p>
+      </div>
+      <div class="card glass p-6">
+        <div class="font-mono text-xs text-neon-cyan">04</div>
+        <h3 class="mt-3 font-semibold text-lg">Deploy & soporte</h3>
+        <p class="mt-2 text-white/60 text-sm">Puesta online, capacitación y soporte continuo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="py-24">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <p class="chip mb-4 mx-auto"><span class="dot"></span><span class="font-mono">FAQ</span></p>
+      <h2 class="text-4xl sm:text-5xl font-bold tracking-tight">Preguntas frecuentes</h2>
+    </div>
+    <div class="space-y-3">
+      <details class="glass rounded-2xl p-5 group">
+        <summary class="flex justify-between items-center cursor-pointer font-medium">
+          <span>¿Cuánto tarda un proyecto?</span>
+          <svg class="chev transition-transform" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <p class="mt-3 text-white/70 text-sm">Una landing sale en 5 a 10 días. E-commerce entre 3 y 5 semanas. Domótica depende del alcance, pero solemos dejar algo funcionando la primera semana.</p>
+      </details>
+      <details class="glass rounded-2xl p-5 group">
+        <summary class="flex justify-between items-center cursor-pointer font-medium">
+          <span>¿Incluye hosting y dominio?</span>
+          <svg class="chev transition-transform" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <p class="mt-3 text-white/70 text-sm">Podemos encargarnos de todo o trabajar sobre tu infraestructura. Te recomendamos lo mejor según tu caso, sin sobreprecio.</p>
+      </details>
+      <details class="glass rounded-2xl p-5 group">
+        <summary class="flex justify-between items-center cursor-pointer font-medium">
+          <span>¿Los precios son finales?</span>
+          <svg class="chev transition-transform" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <p class="mt-3 text-white/70 text-sm">Son precios base orientativos. Al recibir tu pedido por WhatsApp armamos una cotización a medida sin compromiso.</p>
+      </details>
+      <details class="glass rounded-2xl p-5 group">
+        <summary class="flex justify-between items-center cursor-pointer font-medium">
+          <span>¿Qué incluye el mantenimiento?</span>
+          <svg class="chev transition-transform" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <p class="mt-3 text-white/70 text-sm">Actualizaciones, backups, monitoreo, correcciones menores, soporte por WhatsApp y un informe mensual.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO / CTA FINAL -->
+<section id="contacto" class="py-24">
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <div class="relative overflow-hidden rounded-3xl glass p-10 sm:p-14 text-center">
+      <div class="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-neon-violet/30 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-neon-cyan/25 blur-3xl"></div>
+      <div class="relative">
+        <h2 class="text-4xl sm:text-5xl font-bold tracking-tight">¿Listo para arrancar?</h2>
+        <p class="mt-4 text-white/70 text-lg max-w-xl mx-auto">Agregá los servicios al carrito y enviamos tu pedido por WhatsApp. Respuesta en menos de 24 hs.</p>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="#servicios" class="btn-primary text-white font-semibold px-7 py-3.5 rounded-xl w-full sm:w-auto">Armar mi pedido</a>
+          <a id="waDirect" href="#" class="btn-ghost text-white/90 font-medium px-7 py-3.5 rounded-xl w-full sm:w-auto inline-flex items-center justify-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.94 11.94 0 0 0 12.04 0C5.46 0 .11 5.35.11 11.93c0 2.1.55 4.15 1.6 5.96L0 24l6.3-1.65a11.93 11.93 0 0 0 5.73 1.46h.01c6.58 0 11.93-5.35 11.93-11.93 0-3.19-1.24-6.19-3.45-8.4zM12.04 21.5h-.01a9.58 9.58 0 0 1-4.88-1.34l-.35-.21-3.74.98 1-3.64-.23-.37a9.55 9.55 0 0 1-1.47-5.08c0-5.29 4.3-9.59 9.6-9.59 2.56 0 4.97 1 6.78 2.81a9.53 9.53 0 0 1 2.81 6.79c0 5.29-4.3 9.59-9.51 9.65zm5.48-7.17c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.18.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.48-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.05 1.03-1.05 2.5s1.08 2.9 1.23 3.1c.15.2 2.12 3.24 5.14 4.54.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35z"/></svg>
+            Chat directo
+          </a>
+        </div>
+        <p class="mt-6 text-xs text-white/40 font-mono">hola@tudominio.com · +54 9 11 0000-0000</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/5 py-10">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2 text-white/60 text-sm">
+      <div class="w-6 h-6 rounded-md bg-gradient-to-br from-neon-violet via-neon-cyan to-neon-pink"></div>
+      <span>© 2026 NeoStack. Todos los derechos reservados.</span>
+    </div>
+    <div class="flex items-center gap-5 text-white/50 text-sm">
+      <a href="#" class="hover:text-white transition">Instagram</a>
+      <a href="#" class="hover:text-white transition">LinkedIn</a>
+      <a href="#" class="hover:text-white transition">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div id="scrim" class="scrim fixed inset-0 bg-black/60 backdrop-blur-sm z-[90]"></div>
+<aside id="cartDrawer" class="drawer fixed top-0 right-0 h-full w-full sm:w-[420px] z-[100] bg-ink-950 border-l border-white/10 flex flex-col">
+  <div class="flex items-center justify-between p-5 border-b border-white/10">
+    <div class="flex items-center gap-2">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <h3 class="font-semibold">Tu carrito</h3>
+    </div>
+    <button id="cartClose" class="btn-ghost rounded-lg p-2" aria-label="Cerrar carrito">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div id="cartItems" class="flex-1 overflow-y-auto p-5 space-y-3">
+    <!-- items inyectados -->
+  </div>
+
+  <div id="cartEmpty" class="flex-1 flex flex-col items-center justify-center text-center px-6">
+    <div class="w-16 h-16 rounded-2xl glass flex items-center justify-center mb-4">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="1.7" stroke-linecap="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    </div>
+    <h4 class="font-semibold">Todavía está vacío</h4>
+    <p class="text-white/60 text-sm mt-1">Agregá servicios desde el catálogo para ver el resumen acá.</p>
+    <button id="cartEmptyCta" class="mt-6 btn-primary text-white font-medium px-5 py-2.5 rounded-xl">Ver servicios</button>
+  </div>
+
+  <div id="cartFooter" class="hidden border-t border-white/10 p-5 space-y-4">
+    <div class="flex items-center justify-between text-sm text-white/70">
+      <span>Subtotal estimado</span>
+      <span id="cartSubtotal" class="text-white font-semibold text-lg">US$ 0</span>
+    </div>
+    <p class="text-[11px] text-white/40 leading-relaxed">Los montos son orientativos. Al enviar recibirás una cotización final sin compromiso.</p>
+    <button id="checkoutBtn" class="w-full btn-primary text-white font-semibold px-5 py-3.5 rounded-xl flex items-center justify-center gap-2">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.94 11.94 0 0 0 12.04 0C5.46 0 .11 5.35.11 11.93c0 2.1.55 4.15 1.6 5.96L0 24l6.3-1.65a11.93 11.93 0 0 0 5.73 1.46h.01c6.58 0 11.93-5.35 11.93-11.93 0-3.19-1.24-6.19-3.45-8.4zM12.04 21.5h-.01a9.58 9.58 0 0 1-4.88-1.34l-.35-.21-3.74.98 1-3.64-.23-.37a9.55 9.55 0 0 1-1.47-5.08c0-5.29 4.3-9.59 9.6-9.59 2.56 0 4.97 1 6.78 2.81a9.53 9.53 0 0 1 2.81 6.79c0 5.29-4.3 9.59-9.51 9.65z"/></svg>
+      Enviar pedido por WhatsApp
+    </button>
+  </div>
+</aside>
+
+<!-- Toast -->
+<div id="toast" class="toast">Agregado al carrito ✓</div>
+
+<script>
+  // =====================
+  // CONFIG — edita acá
+  // =====================
+  const CONFIG = {
+    brand: 'NeoStack',
+    // Cambiá por tu número real en formato internacional sin +, sin espacios. Ej: 5491100000000
+    whatsapp: '5491100000000',
+    currency: 'US$',
+  };
+
+  const SERVICES = [
+    {
+      id: 'web-landing',
+      category: 'Desarrollo Web',
+      name: 'Landing Page Pro',
+      price: 450,
+      tag: 'Desde',
+      blurb: 'Página de alto impacto para convertir visitantes en clientes.',
+      features: ['Hasta 6 secciones', 'Animaciones & SEO base', 'Responsive total', 'Deploy + SSL'],
+      color: 'violet',
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+      highlight: true,
+    },
+    {
+      id: 'ecommerce',
+      category: 'Tiendas Online',
+      name: 'E-commerce Completo',
+      price: 1200,
+      tag: 'Desde',
+      blurb: 'Tienda con carrito, pagos y gestión de productos lista para vender.',
+      features: ['Catálogo ilimitado', 'Pagos (Stripe/MP)', 'Panel admin', 'Integración envíos'],
+      color: 'cyan',
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`,
+    },
+    {
+      id: 'domotica',
+      category: 'Domótica',
+      name: 'Hogar Inteligente',
+      price: 890,
+      tag: 'Desde',
+      blurb: 'Luces, clima, persianas y seguridad automatizados desde tu celu.',
+      features: ['Hub local', 'App + comandos de voz', 'Rutinas inteligentes', 'Instalación incluida'],
+      color: 'pink',
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>`,
+    },
+    {
+      id: 'mantenimiento',
+      category: 'Soporte',
+      name: 'Plan Mantenimiento',
+      price: 90,
+      tag: '/mes',
+      blurb: 'Tu sitio y sistema siempre al día. Backups, updates y soporte.',
+      features: ['Backups diarios', 'Actualizaciones', 'Soporte WhatsApp', 'Informe mensual'],
+      color: 'lime',
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`,
+    },
+  ];
+
+  const COLOR_MAP = {
+    violet: { bg: 'bg-neon-violet/15', border: 'border-neon-violet/40', text: 'text-neon-violet' },
+    cyan:   { bg: 'bg-neon-cyan/15',   border: 'border-neon-cyan/40',   text: 'text-neon-cyan' },
+    pink:   { bg: 'bg-neon-pink/15',   border: 'border-neon-pink/40',   text: 'text-neon-pink' },
+    lime:   { bg: 'bg-neon-lime/15',   border: 'border-neon-lime/40',   text: 'text-neon-lime' },
+  };
+
+  // =====================
+  // RENDER SERVICES
+  // =====================
+  const grid = document.getElementById('servicesGrid');
+  grid.innerHTML = SERVICES.map(s => {
+    const c = COLOR_MAP[s.color];
+    return `
+      <article class="card glass p-6 flex flex-col">
+        ${s.highlight ? '<div class="absolute -top-3 right-5"><span class="chip !bg-neon-pink/20 !border-neon-pink/50 !text-pink-200">★ Más elegido</span></div>' : ''}
+        <div class="flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl ${c.bg} border ${c.border} ${c.text} flex items-center justify-center">${s.icon}</div>
+          <span class="font-mono text-[10px] uppercase tracking-widest text-white/40">${s.category}</span>
+        </div>
+        <h3 class="mt-5 text-xl font-semibold">${s.name}</h3>
+        <p class="mt-2 text-sm text-white/60">${s.blurb}</p>
+        <ul class="mt-4 space-y-1.5 text-sm text-white/70">
+          ${s.features.map(f => `<li class="flex items-start gap-2"><span class="mt-[7px] w-1.5 h-1.5 rounded-full ${c.bg.replace('/15','/60')}"></span>${f}</li>`).join('')}
+        </ul>
+        <div class="mt-6 flex items-end justify-between">
+          <div>
+            <div class="text-[11px] uppercase tracking-widest text-white/40 font-mono">${s.tag}</div>
+            <div class="text-2xl font-bold">${CONFIG.currency} ${s.price.toLocaleString()}<span class="text-sm text-white/40 font-normal">${s.tag === '/mes' ? '/mes' : ''}</span></div>
+          </div>
+        </div>
+        <button data-id="${s.id}" class="addBtn mt-5 btn-primary text-white font-semibold py-2.5 rounded-xl w-full flex items-center justify-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar al carrito
+        </button>
+      </article>
+    `;
+  }).join('');
+
+  // =====================
+  // CART LOGIC
+  // =====================
+  const CART_KEY = 'neostack_cart_v1';
+  let cart = {};
+  try { cart = JSON.parse(localStorage.getItem(CART_KEY) || '{}'); } catch(_) { cart = {}; }
+
+  const cartBtn = document.getElementById('cartBtn');
+  const cartClose = document.getElementById('cartClose');
+  const drawer = document.getElementById('cartDrawer');
+  const scrim = document.getElementById('scrim');
+  const itemsEl = document.getElementById('cartItems');
+  const emptyEl = document.getElementById('cartEmpty');
+  const footerEl = document.getElementById('cartFooter');
+  const subtotalEl = document.getElementById('cartSubtotal');
+  const badge = document.getElementById('cartBadge');
+  const toast = document.getElementById('toast');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const waDirect = document.getElementById('waDirect');
+  const emptyCta = document.getElementById('cartEmptyCta');
+
+  waDirect.href = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('¡Hola! Quiero consultar por sus servicios.')}`;
+
+  function saveCart() {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch(_){}
+  }
+
+  function openCart() {
+    drawer.classList.add('open');
+    scrim.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCart() {
+    drawer.classList.remove('open');
+    scrim.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function addItem(id) {
+    if (cart[id]) cart[id].qty += 1;
+    else {
+      const s = SERVICES.find(x => x.id === id);
+      cart[id] = { id, qty: 1, name: s.name, price: s.price, tag: s.tag, category: s.category };
+    }
+    saveCart(); renderCart(); showToast(`Agregado: ${SERVICES.find(x=>x.id===id).name}`);
+  }
+  function removeItem(id) { delete cart[id]; saveCart(); renderCart(); }
+  function changeQty(id, delta) {
+    if (!cart[id]) return;
+    cart[id].qty = Math.max(1, cart[id].qty + delta);
+    saveCart(); renderCart();
+  }
+
+  function renderCart() {
+    const items = Object.values(cart);
+    const count = items.reduce((a,c)=>a+c.qty,0);
+    const subtotal = items.reduce((a,c)=>a+c.qty*c.price,0);
+
+    if (count > 0) {
+      badge.textContent = count;
+      badge.classList.remove('hidden');
+      emptyEl.classList.add('hidden');
+      footerEl.classList.remove('hidden');
+      itemsEl.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+      emptyEl.classList.remove('hidden');
+      footerEl.classList.add('hidden');
+      itemsEl.classList.add('hidden');
+    }
+
+    itemsEl.innerHTML = items.map(it => `
+      <div class="glass rounded-2xl p-4 flex gap-3">
+        <div class="flex-1 min-w-0">
+          <div class="text-[10px] uppercase tracking-widest text-white/40 font-mono">${it.category}</div>
+          <div class="font-semibold truncate">${it.name}</div>
+          <div class="text-sm text-white/60">${CONFIG.currency} ${it.price.toLocaleString()}${it.tag === '/mes' ? '/mes' : ''}</div>
+          <div class="mt-3 flex items-center gap-2">
+            <button data-act="dec" data-id="${it.id}" class="w-7 h-7 rounded-lg btn-ghost flex items-center justify-center">−</button>
+            <span class="w-6 text-center font-mono text-sm">${it.qty}</span>
+            <button data-act="inc" data-id="${it.id}" class="w-7 h-7 rounded-lg btn-ghost flex items-center justify-center">+</button>
+            <button data-act="rm" data-id="${it.id}" class="ml-auto text-xs text-white/40 hover:text-neon-pink transition">Quitar</button>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-xs text-white/40">Subtotal</div>
+          <div class="font-semibold">${CONFIG.currency} ${(it.price*it.qty).toLocaleString()}</div>
+        </div>
+      </div>
+    `).join('');
+
+    subtotalEl.textContent = `${CONFIG.currency} ${subtotal.toLocaleString()}`;
+  }
+
+  function showToast(msg) {
+    toast.textContent = msg + ' ✓';
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=> toast.classList.remove('show'), 1800);
+  }
+
+  function buildWhatsAppMessage() {
+    const items = Object.values(cart);
+    if (items.length === 0) return '';
+    const lines = [
+      `¡Hola ${CONFIG.brand}! Quiero avanzar con este pedido:`,
+      ''
+    ];
+    let total = 0;
+    items.forEach((it, i) => {
+      const sub = it.price * it.qty;
+      total += sub;
+      lines.push(`${i+1}. ${it.name} — x${it.qty} — ${CONFIG.currency} ${sub.toLocaleString()}${it.tag === '/mes' ? '/mes' : ''}`);
+    });
+    lines.push('');
+    lines.push(`*Subtotal estimado:* ${CONFIG.currency} ${total.toLocaleString()}`);
+    lines.push('');
+    lines.push('Quedo atento/a a la cotización final. ¡Gracias!');
+    return lines.join('\n');
+  }
+
+  // Events
+  cartBtn.addEventListener('click', openCart);
+  cartClose.addEventListener('click', closeCart);
+  scrim.addEventListener('click', closeCart);
+  emptyCta.addEventListener('click', () => { closeCart(); document.getElementById('servicios').scrollIntoView({behavior:'smooth'}); });
+
+  document.addEventListener('click', (e) => {
+    const add = e.target.closest('.addBtn');
+    if (add) { addItem(add.dataset.id); return; }
+    const act = e.target.closest('[data-act]');
+    if (act) {
+      const id = act.dataset.id;
+      if (act.dataset.act === 'inc') changeQty(id, +1);
+      if (act.dataset.act === 'dec') changeQty(id, -1);
+      if (act.dataset.act === 'rm') removeItem(id);
+    }
+  });
+
+  checkoutBtn.addEventListener('click', () => {
+    const msg = buildWhatsAppMessage();
+    if (!msg) return;
+    const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  });
+
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCart(); });
+
+  renderCart();
+</script>
+</body>
+</html>
